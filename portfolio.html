@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — M</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merienda:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Montserrat',sans-serif;
+  background:#4a5d4a; color:#e8e8e8;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE ROUTER
+   ═══════════════════════════════════════════ */
+.page { display:none; min-height:100vh; }
+.page.active { display:block; }
+#landing { display:flex; align-items:center; justify-content:center; height:100vh; position:relative; overflow:hidden; }
+#landing.active { display:flex; }
+
+/* ═══════════════════════════════════════════
+   LOGO
+   ═══════════════════════════════════════════ */
+.logo-wrap {
+  position:fixed; top:28px; right:32px; z-index:100; width:64px;
+  opacity:0; animation:fadeUp .8s .3s forwards;
+}
+.logo-wrap img { width:100%; height:auto; }
+
+/* ═══════════════════════════════════════════
+   BACK ARROW
+   ═══════════════════════════════════════════ */
+.back-btn {
+  position:fixed; top:24px; left:24px; z-index:100;
+  width:48px; height:48px; border-radius:50%;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(12px);
+  display:none; align-items:center; justify-content:center;
+  cursor:pointer; transition:background .25s,transform .25s;
+}
+.back-btn.show { display:flex; }
+.back-btn:hover { background:rgba(255,255,255,.18); transform:translateX(-3px); }
+.back-btn svg { width:20px; height:20px; stroke:#e4ce80; stroke-width:2.2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ═══════════════════════════════════════════
+   LANDING — 3D PILL SCENE
+   ═══════════════════════════════════════════ */
+.scene {
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  width:860px; height:280px;
+}
+
+/* pill wrapper & 3D */
+.pill-wrap {
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  width:380px; height:170px;
+  perspective:900px; z-index:2;
+}
+.pill {
+  width:100%; height:100%; border-radius:85px;
+  position:relative; transform-style:preserve-3d;
+  animation:spinPill 18s linear infinite;
+  background:
+    linear-gradient(160deg,
+      rgba(255,255,255,.42) 0%,
+      rgba(255,255,255,.11) 32%,
+      rgba(255,255,255,.05) 52%,
+      rgba(255,255,255,.15) 78%,
+      rgba(255,255,255,.35) 100%);
+  border:1.5px solid rgba(255,255,255,.32);
+  backdrop-filter:blur(24px) saturate(1.4);
+  box-shadow:
+    0 6px 12px rgba(0,0,0,.22),
+    0 20px 44px rgba(0,0,0,.32),
+    0 44px 72px rgba(0,0,0,.18),
+    inset 0 2px 5px rgba(255,255,255,.48),
+    inset 0 -3px 10px rgba(0,0,0,.16),
+    inset 5px 0 16px rgba(255,255,255,.08),
+    inset -5px 0 16px rgba(255,255,255,.06);
+  overflow:hidden;
+}
+/* top specular */
+.pill::before {
+  content:''; position:absolute;
+  top:0; left:8%; right:8%; height:40%;
+  background:linear-gradient(180deg,
+    rgba(255,255,255,.36) 0%,
+    rgba(255,255,255,.06) 65%,
+    transparent 100%);
+  border-radius:85px 85px 48% 48%;
+  pointer-events:none; z-index:1;
+}
+/* travelling shine */
+.pill::after {
+  content:''; position:absolute;
+  top:-80%; left:-130%; width:75%; height:260%;
+  background:linear-gradient(115deg,
+    transparent 38%, rgba(255,255,255,.2) 50%, transparent 62%);
+  animation:shineSweep 6s ease-in-out infinite;
+  pointer-events:none; z-index:2;
+}
+@keyframes spinPill { to { transform:rotateY(360deg) rotateX(8deg); } }
+@keyframes shineSweep { 0%,100%{left:-130%} 50%{left:150%} }
+
+/* ground shadow */
+.pill-shadow {
+  position:absolute; bottom:16px; left:50%;
+  transform:translateX(-50%);
+  width:290px; height:24px;
+  background:radial-gradient(ellipse, rgba(0,0,0,.4) 0%, transparent 70%);
+  filter:blur(7px); z-index:0;
+  animation:shadowPulse 18s linear infinite;
+}
+@keyframes shadowPulse {
+  0%,100%{transform:translateX(-50%) scaleX(1);opacity:.65}
+  50%{transform:translateX(-50%) scaleX(.86);opacity:.48}
+}
+
+/* flowers */
+.flower { position:absolute; z-index:3; pointer-events:none; }
+.flower svg { display:block; }
+
+/* bubbles */
+.bubble {
+  position:absolute; top:50%; z-index:5;
+  transform:translateY(-50%);
+  background:linear-gradient(145deg,
+    rgba(255,255,255,.26) 0%,
+    rgba(255,255,255,.09) 45%,
+    rgba(255,255,255,.15) 100%);
+  border:1.5px solid rgba(255,255,255,.28);
+  backdrop-filter:blur(18px) saturate(1.2);
+  border-radius:50px; padding:16px 32px;
+  color:#e4ce80;
+  font-family:'Montserrat',sans-serif;
+  font-size:14px; font-weight:600; letter-spacing:.6px;
+  text-decoration:none; cursor:pointer; white-space:nowrap;
+  box-shadow:
+    0 4px 14px rgba(0,0,0,.26),
+    inset 0 1px 3px rgba(255,255,255,.32),
+    inset 0 -2px 5px rgba(0,0,0,.1);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),
+             background .3s, box-shadow .3s, color .3s;
+}
+.bubble.left  { right:calc(50% + 215px); }
+.bubble.right { left:calc(50% + 215px); }
+.bubble:hover {
+  transform:translateY(-50%) scale(1.07);
+  background:linear-gradient(145deg,
+    rgba(255,255,255,.36) 0%,
+    rgba(255,255,255,.14) 45%,
+    rgba(255,255,255,.22) 100%);
+  color:#fff;
+  box-shadow:
+    0 6px 22px rgba(0,0,0,.34),
+    0 0 18px rgba(228,206,128,.14),
+    inset 0 1px 3px rgba(255,255,255,.38),
+    inset 0 -2px 5px rgba(0,0,0,.14);
+}
+
+/* ═══════════════════════════════════════════
+   PORTFOLIO — Pinterest masonry
+   ═══════════════════════════════════════════ */
+#portfolio { padding:100px 48px 80px; }
+.masonry { column-count:4; column-gap:20px; max-width:1320px; margin:0 auto; }
+.pin {
+  break-inside:avoid; margin-bottom:20px;
+  border-radius:18px; overflow:hidden; position:relative;
+  cursor:pointer;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s;
+  opacity:0; animation:pinIn .5s ease forwards;
+}
+.pin:hover { transform:translateY(-5px) scale(1.012); box-shadow:0 14px 44px rgba(0,0,0,.4); }
+.pin img { width:100%; display:block; }
+.pin-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.72) 0%, transparent 55%);
+  opacity:0; transition:opacity .3s;
+  display:flex; align-items:flex-end; padding:22px 20px;
+  border-radius:18px;
+}
+.pin:hover .pin-overlay { opacity:1; }
+.pin-label { font-size:14px; font-weight:600; color:#e4ce80; letter-spacing:.3px; }
+.pin-tag {
+  display:inline-block; margin-top:5px;
+  font-size:11px; font-weight:500; color:rgba(255,255,255,.52);
+  background:rgba(255,255,255,.1); padding:3px 10px;
+  border-radius:20px; border:1px solid rgba(255,255,255,.1);
+}
+@keyframes pinIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+/* ═══════════════════════════════════════════
+   PROJECT DETAIL
+   ═══════════════════════════════════════════ */
+#detail { padding:100px 48px 80px; }
+.detail-card {
+  max-width:900px; margin:0 auto;
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:28px; overflow:hidden;
+}
+.detail-hero { width:100%; max-height:380px; object-fit:cover; display:block; }
+.detail-body { padding:48px 52px 52px; }
+.detail-title { font-family:'Merienda',cursive; font-size:42px; color:#e4ce80; margin-bottom:6px; line-height:1.2; }
+.detail-tag { display:inline-block; font-size:11px; font-weight:500; color:rgba(228,206,128,.68); letter-spacing:.8px; text-transform:uppercase; margin-bottom:22px; }
+.detail-desc { font-size:15px; line-height:1.9; color:rgba(255,255,255,.76); font-weight:300; max-width:680px; }
+.detail-images { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:34px; }
+.detail-images img { width:100%; border-radius:14px; box-shadow:0 8px 26px rgba(0,0,0,.3); }
+
+/* ═══════════════════════════════════════════
+   MOTIVATION
+   ═══════════════════════════════════════════ */
+#motivation { padding:100px 48px 80px; position:relative; overflow:hidden; }
+.deco-flower { position:fixed; width:68px; height:68px; opacity:.42; pointer-events:none; z-index:1; animation:decoFloat 7s ease-in-out infinite; }
+.deco-flower.tl { top:68px; left:38px; }
+.deco-flower.tr { top:68px; right:98px; animation-delay:1.2s; }
+.deco-flower.bl { bottom:48px; left:58px; animation-delay:2.5s; }
+.deco-flower.br { bottom:48px; right:78px; animation-delay:3.8s; }
+@keyframes decoFloat { 0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-12px) rotate(7deg)} }
+
+.motivation-card {
+  max-width:780px; margin:0 auto; position:relative; z-index:2;
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:28px; padding:64px 68px 60px;
+}
+.motivation-title { font-family:'Merienda',cursive; font-size:46px; color:#e4ce80; text-align:center; margin-bottom:42px; }
+.motivation-body p { font-size:15px; line-height:2; color:rgba(255,255,255,.76); font-weight:300; margin-bottom:18px; text-align:justify; }
+.motivation-sig { text-align:right; margin-top:38px; font-style:italic; color:#e4ce80; font-size:17px; font-weight:500; }
+
+/* ═══════════════════════════════════════════
+   SHARED ANIMATIONS
+   ═══════════════════════════════════════════ */
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes floatA { 0%,100%{transform:translate(0,0) rotate(0)} 33%{transform:translate(12px,-18px) rotate(60deg)} 66%{transform:translate(-10px,8px) rotate(-30deg)} }
+@keyframes floatB { 0%,100%{transform:translate(0,0) rotate(0)} 40%{transform:translate(-14px,-12px) rotate(80deg)} 70%{transform:translate(8px,10px) rotate(-45deg)} }
+@keyframes floatC { 0%,100%{transform:translate(0,0) rotate(0)} 25%{transform:translate(10px,-22px) rotate(100deg)} 60%{transform:translate(-8px,6px) rotate(-60deg)} }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media(max-width:1100px){.masonry{column-count:3}}
+@media(max-width:760px){
+  .masonry{column-count:2}
+  .scene{width:100vw}
+  .pill-wrap{width:260px;height:118px}
+  .pill{border-radius:59px}
+  .bubble{font-size:12px;padding:13px 22px}
+  .bubble.left{right:calc(50% + 150px)}
+  .bubble.right{left:calc(50% + 150px)}
+}
+@media(max-width:520px){
+  .masonry{column-count:1}
+  .detail-body{padding:32px 28px 36px}
+  .motivation-card{padding:40px 28px 36px}
+  .detail-images{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGO -->
+<div class="logo-wrap">
+  <img src="/mnt/user-data/uploads/2b70eb4b-241e-4337-a2a0-9fb46d7bde3d_1_.png" alt="M">
+</div>
+
+<!-- BACK -->
+<button class="back-btn" id="backBtn" aria-label="Retour">
+  <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+</button>
+
+<!-- ════ LANDING ════ -->
+<section id="landing" class="page active">
+  <div class="scene">
+    <div class="pill-shadow"></div>
+    <div class="pill-wrap">
+      <div class="pill">
+        <!-- 6 flowers, varied sizes & timings -->
+        <div class="flower" style="top:16%;left:20%;width:26px;animation:floatA 9s ease-in-out infinite">
+          <svg width="26" height="26" viewBox="0 0 60 60"><ellipse cx="30" cy="13" rx="7" ry="14" fill="#e4ce80" transform="rotate(0 30 30)"/><ellipse cx="30" cy="13" rx="7" ry="14" fill="#dcc070" transform="rotate(45 30 30)"/><ellipse cx="30" cy="13" rx="7" ry="14" fill="#e4ce80" transform="rotate(90 30 30)"/><ellipse cx="30" cy="13" rx="7" ry="14" fill="#dcc070" transform="rotate(135 30 30)"/><ellipse cx="30" cy="13" rx="7" ry="14" fill="#e4ce80" transform="rotate(180 30 30)"/><ellipse cx="30" cy="13" rx="7" ry="14" fill="#dcc070" transform="rotate(225 30 30)"/><ellipse cx="30" cy="13" rx="7" ry="14" fill="#e4ce80" transform="rotate(270 30 30)"/><ellipse cx="30" cy="13" rx="7" ry="14" fill="#dcc070" transform="rotate(315 30 30)"/><circle cx="30" cy="30" r="6" fill="#c9a84c"/></svg>
+        </div>
+        <div class="flower" style="top:54%;left:64%;width:20px;animation:floatB 11s ease-in-out infinite 1s">
+          <svg width="20" height="20" viewBox="0 0 60 60"><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(0 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(60 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(120 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(180 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(240 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(300 30 30)"/><circle cx="30" cy="30" r="5" fill="#c9a84c"/></svg>
+        </div>
+        <div class="flower" style="top:36%;left:46%;width:16px;animation:floatC 10s ease-in-out infinite 2.5s">
+          <svg width="16" height="16" viewBox="0 0 60 60"><ellipse cx="30" cy="13" rx="5.5" ry="12" fill="#e4ce80" transform="rotate(0 30 30)"/><ellipse cx="30" cy="13" rx="5.5" ry="12" fill="#dcc070" transform="rotate(72 30 30)"/><ellipse cx="30" cy="13" rx="5.5" ry="12" fill="#e4ce80" transform="rotate(144 30 30)"/><ellipse cx="30" cy="13" rx="5.5" ry="12" fill="#dcc070" transform="rotate(216 30 30)"/><ellipse cx="30" cy="13" rx="5.5" ry="12" fill="#e4ce80" transform="rotate(288 30 30)"/><circle cx="30" cy="30" r="4.5" fill="#c9a84c"/></svg>
+        </div>
+        <div class="flower" style="top:66%;left:26%;width:22px;animation:floatA 12s ease-in-out infinite 4s">
+          <svg width="22" height="22" viewBox="0 0 60 60"><ellipse cx="30" cy="13" rx="6.5" ry="13.5" fill="#e4ce80" transform="rotate(0 30 30)"/><ellipse cx="30" cy="13" rx="6.5" ry="13.5" fill="#dcc070" transform="rotate(45 30 30)"/><ellipse cx="30" cy="13" rx="6.5" ry="13.5" fill="#e4ce80" transform="rotate(90 30 30)"/><ellipse cx="30" cy="13" rx="6.5" ry="13.5" fill="#dcc070" transform="rotate(135 30 30)"/><ellipse cx="30" cy="13" rx="6.5" ry="13.5" fill="#e4ce80" transform="rotate(180 30 30)"/><ellipse cx="30" cy="13" rx="6.5" ry="13.5" fill="#dcc070" transform="rotate(225 30 30)"/><ellipse cx="30" cy="13" rx="6.5" ry="13.5" fill="#e4ce80" transform="rotate(270 30 30)"/><ellipse cx="30" cy="13" rx="6.5" ry="13.5" fill="#dcc070" transform="rotate(315 30 30)"/><circle cx="30" cy="30" r="5.5" fill="#c9a84c"/></svg>
+        </div>
+        <div class="flower" style="top:24%;left:70%;width:18px;animation:floatB 8.5s ease-in-out infinite .8s">
+          <svg width="18" height="18" viewBox="0 0 60 60"><ellipse cx="30" cy="12" rx="5.8" ry="13" fill="#e4ce80" transform="rotate(0 30 30)"/><ellipse cx="30" cy="12" rx="5.8" ry="13" fill="#dcc070" transform="rotate(60 30 30)"/><ellipse cx="30" cy="12" rx="5.8" ry="13" fill="#e4ce80" transform="rotate(120 30 30)"/><ellipse cx="30" cy="12" rx="5.8" ry="13" fill="#dcc070" transform="rotate(180 30 30)"/><ellipse cx="30" cy="12" rx="5.8" ry="13" fill="#e4ce80" transform="rotate(240 30 30)"/><ellipse cx="30" cy="12" rx="5.8" ry="13" fill="#dcc070" transform="rotate(300 30 30)"/><circle cx="30" cy="30" r="4.8" fill="#c9a84c"/></svg>
+        </div>
+        <div class="flower" style="top:48%;left:14%;width:13px;animation:floatC 13s ease-in-out infinite 3s">
+          <svg width="13" height="13" viewBox="0 0 60 60"><ellipse cx="30" cy="14" rx="5" ry="11" fill="#e4ce80" transform="rotate(0 30 30)"/><ellipse cx="30" cy="14" rx="5" ry="11" fill="#dcc070" transform="rotate(72 30 30)"/><ellipse cx="30" cy="14" rx="5" ry="11" fill="#e4ce80" transform="rotate(144 30 30)"/><ellipse cx="30" cy="14" rx="5" ry="11" fill="#dcc070" transform="rotate(216 30 30)"/><ellipse cx="30" cy="14" rx="5" ry="11" fill="#e4ce80" transform="rotate(288 30 30)"/><circle cx="30" cy="30" r="4" fill="#c9a84c"/></svg>
+        </div>
+      </div>
+    </div>
+    <!-- Bubbles -->
+    <a class="bubble left"  id="btnMotivation" href="#">Lettre de motivation</a>
+    <a class="bubble right" id="btnPortfolio"  href="#">Portfolio</a>
+  </div>
+</section>
+
+<!-- ════ PORTFOLIO ════ -->
+<section id="portfolio" class="page">
+  <div class="masonry" id="masonry"></div>
+</section>
+
+<!-- ════ DETAIL ════ -->
+<section id="detail" class="page">
+  <div class="detail-card" id="detailCard"></div>
+</section>
+
+<!-- ════ MOTIVATION ════ -->
+<section id="motivation" class="page">
+  <!-- Corner flower decorations -->
+  <div class="deco-flower tl"><svg width="68" height="68" viewBox="0 0 60 60"><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(0 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(45 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(90 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(135 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(180 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(225 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(270 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(315 30 30)"/><circle cx="30" cy="30" r="5" fill="#c9a84c"/></svg></div>
+  <div class="deco-flower tr"><svg width="68" height="68" viewBox="0 0 60 60"><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(0 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(60 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(120 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(180 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(240 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(300 30 30)"/><circle cx="30" cy="30" r="5" fill="#c9a84c"/></svg></div>
+  <div class="deco-flower bl"><svg width="68" height="68" viewBox="0 0 60 60"><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(0 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(72 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(144 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(216 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(288 30 30)"/><circle cx="30" cy="30" r="5" fill="#c9a84c"/></svg></div>
+  <div class="deco-flower br"><svg width="68" height="68" viewBox="0 0 60 60"><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(0 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(45 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(90 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(135 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(180 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(225 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#e4ce80" transform="rotate(270 30 30)"/><ellipse cx="30" cy="12" rx="6" ry="13" fill="#dcc070" transform="rotate(315 30 30)"/><circle cx="30" cy="30" r="5" fill="#c9a84c"/></svg></div>
+
+  <div class="motivation-card">
+    <h1 class="motivation-title">Lettre de Motivation</h1>
+    <div class="motivation-body">
+      <p>Madame, Monsieur,</p>
+      <p>C'est avec un grand enthousiasme que je vous soumets ma candidature pour intégrer votre programme de Master en alternance. Passionné(e) par [votre domaine d'étude], je suis convaincu(e) que cette formation représente l'opportunité idéale pour approfondir mes connaissances théoriques tout en développant une expérience professionnelle concrète.</p>
+      <p>Mon parcours académique m'a permis d'acquérir des compétences solides en [mentionnez vos compétences clés], que j'ai pu mettre en pratique à travers divers projets universitaires et stages. Ces expériences ont renforcé ma conviction que l'alternance est le meilleur moyen d'allier théorie et pratique, permettant ainsi une montée en compétences rapide et efficace.</p>
+      <p>Votre établissement se distingue par [mentionnez les points forts de l'école/université], des atouts qui correspondent parfaitement à mes aspirations professionnelles. Je suis particulièrement intéressé(e) par [mentionnez des aspects spécifiques du programme] qui me permettront de développer une expertise pointue dans [votre domaine de spécialisation].</p>
+      <p>Rigoureux(se), créatif(ve) et doté(e) d'un excellent esprit d'équipe, je suis prêt(e) à m'investir pleinement dans cette formation et à contribuer activement à la vie de votre établissement. Mon portfolio, que vous pouvez consulter sur ce site, témoigne de mon engagement et de ma capacité à mener des projets de bout en bout.</p>
+      <p>Je reste à votre disposition pour tout entretien qui vous permettrait de mieux apprécier ma motivation et mes compétences. Dans l'attente de votre retour, je vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées.</p>
+      <div class="motivation-sig">Votre Nom</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     APP LOGIC
+     ════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+/*
+ * ════════════════════════════════════════════════════════════
+ *  HOW TO CUSTOMISE ON GITHUB
+ * ════════════════════════════════════════════════════════════
+ *
+ * 1. ADD / EDIT A PROJECT
+ *    Each object in the PROJECTS array below is one Pinterest pin.
+ *    Duplicate an entry and edit these fields:
+ *
+ *      id          → unique number (increment from the last one)
+ *      title       → project name shown on hover & detail page
+ *      tag         → small label (e.g. "UX / UI", "Branding", "Full-Stack")
+ *      image       → thumbnail URL for the Pinterest board
+ *                     • Use an external URL  : "https://example.com/photo.jpg"
+ *                     • Or a local file path : "images/project1.jpg"
+ *                       (put your images in an /images/ folder next to index.html)
+ *      description → paragraph shown on the detail page
+ *      images[]    → array of URLs/paths for extra images on the detail page
+ *                     The FIRST image in this array also becomes the hero banner.
+ *
+ * 2. REMOVE A PROJECT
+ *    Simply delete the entire object { id:…, title:…, … } from the array.
+ *
+ * 3. CHANGE THE COVER LETTER TEXT
+ *    Scroll down to the <section id="motivation"> and edit the <p> tags
+ *    inside .motivation-body. Replace [placeholders] with your real info.
+ *    Change "Votre Nom" in .motivation-sig to your actual name.
+ *
+ * 4. SWAP YOUR LOGO
+ *    Replace the <img> src inside .logo-wrap with the path to your logo file.
+ *
+ * ════════════════════════════════════════════════════════════
+ */
+
+  const PROJECTS = [
+    {
+      id: 1,
+      title: "Design d'Interface Mobile",
+      tag: "UX / UI",
+      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80",
+      description: "Conception complète d'une interface mobile axée sur l'accessibilité et l'ergonomie. Le projet comprend wireframes, maquettes haute fidélité et un prototype interactif validé avec des tests utilisateurs. Approche centrée sur la simplicité et la fluidité du parcours client.",
+      images: [
+        "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
+        "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&q=80"
+      ]
+    },
+    {
+      id: 2,
+      title: "Identité Visuelle — Startup Tech",
+      tag: "Branding",
+      image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=500&q=80",
+      description: "Création d'une identité visuelle complète pour une startup innovante : logo, charte graphique, déclinaisons digitales et print, brand book. L'approche minimaliste et moderne reflète les valeurs forward-thinking de l'entreprise.",
+      images: [
+        "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&q=80",
+        "https://images.unsplash.com/photo-1600132806608-231446b2e7af?w=800&q=80"
+      ]
+    },
+    {
+      id: 3,
+      title: "Plateforme de Gestion de Projet",
+      tag: "Full-Stack",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80",
+      description: "Application web responsive pour la collaboration en équipe. Stack : React + Node.js. Authentification OAuth, intégration d'API tierces (Slack, Notion), tableau Kanban en temps réel avec WebSockets et système de notification poussée.",
+      images: [
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+        "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80"
+      ]
+    },
+    {
+      id: 4,
+      title: "Packaging — Cosmétiques Bio",
+      tag: "Packaging",
+      image: "https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?w=500&q=80",
+      description: "Packaging éco-responsable pour une gamme de soins bio. Matériaux recyclables, palette naturelle, étiquettes illustrées à la main. Le projet inclut la conception complète du conditionnement, de l'étiquette au kit de communication print.",
+      images: [
+        "https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?w=800&q=80"
+      ]
+    },
+    {
+      id: 5,
+      title: "Motion Design — Campagne Digitale",
+      tag: "Motion",
+      image: "https://images.unsplash.com/photo-1551269901-5c5e14c25df7?w=600&q=80",
+      description: "Animations motion design pour une campagne de communication : vidéos explicatives, contenus réseaux sociaux, GIFs. Style graphique dynamique qui capte l'attention tout en transmettant les messages brand de façon claire et engageante.",
+      images: [
+        "https://images.unsplash.com/photo-1551269901-5c5e14c25df7?w=800&q=80",
+        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80"
+      ]
+    },
+    {
+      id: 6,
+      title: "Plateforme E-commerce",
+      tag: "E-commerce",
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80",
+      description: "Site e-commerce end-to-end : interface client intuitive, panier, paiement sécurisé (Stripe), gestion des stocks en back-office, tableau de bord analytique. Optimisation SEO et intégration des outils de tracking pour le pilotage commercial.",
+      images: [
+        "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80"
+      ]
+    },
+    {
+      id: 7,
+      title: "Illustrations — Livre Jeunesse",
+      tag: "Illustration",
+      image: "https://images.unsplash.com/photo-1452457750107-cd084dce177d?w=500&q=80",
+      description: "Série d'illustrations digitales pour un album jeunesse interactif. Style coloré et ludique adapté à l'enfant. Chaque planche raconte un chapitre et intègre des éléments animés pour enrichir l'expérience narrative.",
+      images: [
+        "https://images.unsplash.com/photo-1452457750107-cd084dce177d?w=800&q=80",
+        "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80"
+      ]
+    },
+    {
+      id: 8,
+      title: "Dashboard — Analyse de Données",
+      tag: "Data Viz",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&q=80",
+      description: "Interface de visualisation de données complexes : graphiques interactifs (D3.js), filtres avancés, exports PDF. Design épuré qui met en valeur les KPIs essentielles. Responsive et optimisé pour une lecture rapide en salle de réunion.",
+      images: [
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80"
+      ]
+    }
+  ];
+
+  /* ─── Router ─── */
+  const nav = ['landing'];
+  const PAGES = {landing:'#landing', portfolio:'#portfolio', detail:'#detail', motivation:'#motivation'};
+
+  function show(key){
+    Object.values(PAGES).forEach(s=>document.querySelector(s).classList.remove('active'));
+    document.querySelector(PAGES[key]).classList.add('active');
+    document.getElementById('backBtn').classList.toggle('show', key!=='landing');
+    window.scrollTo(0,0);
+  }
+  function go(key){
+    if(nav[nav.length-1]===key) return;
+    nav.push(key); show(key);
+  }
+  function back(){
+    if(nav.length<=1) return;
+    nav.pop(); show(nav[nav.length-1]);
+  }
+
+  /* ─── Masonry ─── */
+  function renderMasonry(){
+    document.getElementById('masonry').innerHTML = PROJECTS.map((p,i)=>
+      `<div class="pin" style="animation-delay:${i*.06}s" onclick="openDetail(${p.id})">
+         <img src="${p.image}" alt="${p.title}" loading="lazy">
+         <div class="pin-overlay">
+           <div><div class="pin-label">${p.title}</div><span class="pin-tag">${p.tag}</span></div>
+         </div>
+       </div>`
+    ).join('');
+  }
+
+  /* ─── Detail ─── */
+  window.openDetail = function(id){
+    const p = PROJECTS.find(x=>x.id===id);
+    if(!p) return;
+    const extras = p.images.length>1
+      ? `<div class="detail-images">${p.images.slice(1).map(i=>`<img src="${i}" alt="${p.title}" loading="lazy">`).join('')}</div>`
+      : '';
+    document.getElementById('detailCard').innerHTML =
+      `<img class="detail-hero" src="${p.images[0]}" alt="${p.title}" loading="lazy">
+       <div class="detail-body">
+         <h1 class="detail-title">${p.title}</h1>
+         <span class="detail-tag">${p.tag}</span>
+         <p class="detail-desc">${p.description}</p>
+         ${extras}
+       </div>`;
+    go('detail');
+  };
+
+  /* ─── Wiring ─── */
+  document.getElementById('btnPortfolio').addEventListener('click',  e=>{e.preventDefault();go('portfolio')});
+  document.getElementById('btnMotivation').addEventListener('click', e=>{e.preventDefault();go('motivation')});
+  document.getElementById('backBtn').addEventListener('click', back);
+
+  renderMasonry();
+})();
+</script>
+</body>
+</html>

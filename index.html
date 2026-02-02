@@ -12,19 +12,16 @@
             font-weight: normal;
             font-style: normal;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             background: #0a0a0a;
         }
-
         /* Landing Page */
         .landing-page {
             min-height: 100vh;
@@ -34,7 +31,6 @@
             justify-content: center;
             overflow: hidden;
         }
-
         .background-image {
             position: absolute;
             top: 0;
@@ -44,7 +40,6 @@
             object-fit: cover;
             z-index: 0;
         }
-
         .background-overlay {
             position: absolute;
             top: 0;
@@ -54,7 +49,6 @@
             background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%);
             z-index: 1;
         }
-
         /* Logo */
         .logo {
             position: absolute;
@@ -76,7 +70,6 @@
             z-index: 10;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
-
         /* Main Content Container */
         .content-wrapper {
             position: relative;
@@ -89,12 +82,10 @@
             align-items: center;
             padding: 40px;
         }
-
         /* Text Content */
         .text-content {
             color: #fff;
         }
-
         .main-title {
             font-family: 'Brown Sugar', cursive;
             font-size: clamp(48px, 6vw, 82px);
@@ -105,7 +96,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .intro-text {
             font-size: clamp(16px, 1.2vw, 20px);
             line-height: 1.8;
@@ -113,14 +103,12 @@
             margin-bottom: 40px;
             font-weight: 300;
         }
-
         /* Navigation Buttons */
         .nav-buttons {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
         }
-
         .nav-btn {
             padding: 18px 40px;
             border-radius: 50px;
@@ -137,7 +125,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .nav-btn::before {
             content: '';
             position: absolute;
@@ -149,22 +136,18 @@
             transform: translateX(-100%);
             transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
-
         .nav-btn:hover::before {
             transform: translateX(0);
         }
-
         .nav-btn-primary {
             background: #4A5D4A;
             color: #fff;
             box-shadow: 0 8px 24px rgba(74, 93, 74, 0.4);
         }
-
         .nav-btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 32px rgba(74, 93, 74, 0.5);
         }
-
         .nav-btn-secondary {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -172,12 +155,10 @@
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
         .nav-btn-secondary:hover {
             background: rgba(255, 255, 255, 0.15);
             transform: translateY(-2px);
         }
-
         /* Profile Image Container */
         .profile-container {
             position: relative;
@@ -185,7 +166,6 @@
             justify-content: center;
             align-items: center;
         }
-
         .profile-glass {
             position: relative;
             width: 450px;
@@ -199,14 +179,12 @@
             overflow: hidden;
             padding: 20px;
         }
-
         .profile-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 20px;
         }
-
         /* Decorative Elements */
         .decoration-circle {
             position: absolute;
@@ -215,21 +193,18 @@
             filter: blur(60px);
             z-index: 2;
         }
-
         .circle-1 {
             width: 400px;
             height: 400px;
             top: -200px;
             left: -200px;
         }
-
         .circle-2 {
             width: 300px;
             height: 300px;
             bottom: -150px;
             right: -150px;
         }
-
         /* Portfolio Page */
         .portfolio-page {
             display: none;
@@ -237,7 +212,6 @@
             background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
             padding: 100px 40px 60px;
         }
-
         .back-button {
             position: fixed;
             top: 40px;
@@ -258,64 +232,66 @@
             color: #fff;
             font-size: 24px;
         }
-
         .back-button:hover {
             background: rgba(255, 255, 255, 0.15);
             transform: translateX(-4px);
         }
-
         .portfolio-header {
             text-align: center;
             margin-bottom: 60px;
         }
-
         .portfolio-title {
             font-family: 'Brown Sugar', cursive;
             font-size: clamp(40px, 5vw, 64px);
             color: #fff;
             margin-bottom: 16px;
         }
-
         .portfolio-subtitle {
             font-size: 18px;
             color: rgba(255, 255, 255, 0.7);
             font-weight: 300;
         }
-
-        /* Pinterest-style Grid */
+        /* Pinterest-style Grid - UPDATED */
         .pinterest-grid {
             max-width: 1400px;
             margin: 0 auto;
-            column-count: 3;
-            column-gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            grid-auto-rows: 10px;
         }
-
         .grid-item {
-            break-inside: avoid;
-            margin-bottom: 20px;
-            cursor: pointer;
             position: relative;
+            cursor: pointer;
             overflow: hidden;
             border-radius: 20px;
             background: rgba(255, 255, 255, 0.05);
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
-
+        /* Column 1: Project 1 (square) + Project 2 (tall portrait) */
+        .grid-item:nth-child(1) { grid-row: span 40; }  /* Project 1 - 1:1 */
+        .grid-item:nth-child(2) { grid-row: span 71; }  /* Project 2 - 9:16 */
+        /* Column 2: Project 5 (medium portrait) + Project 3 (square) */
+        .grid-item:nth-child(3) { grid-row: span 60; }  /* Project 5 - 2:3 */
+        .grid-item:nth-child(4) { grid-row: span 40; }  /* Project 3 - 1:1 */
+        /* Column 3: Project 6 (tall portrait) + Project 4 (square) */
+        .grid-item:nth-child(5) { grid-row: span 71; }  /* Project 6 - 9:16 */
+        .grid-item:nth-child(6) { grid-row: span 40; }  /* Project 4 - 1:1 */
+        
         .grid-item:hover {
             transform: translateY(-8px);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
-
         .grid-item:hover .grid-overlay {
             opacity: 1;
         }
-
         .grid-image {
             width: 100%;
+            height: 100%;
             display: block;
+            object-fit: cover;
             border-radius: 20px;
         }
-
         .grid-overlay {
             position: absolute;
             top: 0;
@@ -330,13 +306,11 @@
             padding: 24px;
             border-radius: 20px;
         }
-
         .grid-title {
             color: #fff;
             font-size: 18px;
             font-weight: 600;
         }
-
         /* Project Detail Page */
         .project-detail {
             display: none;
@@ -344,19 +318,16 @@
             background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
             padding: 100px 40px 60px;
         }
-
         .project-content {
             max-width: 1200px;
             margin: 0 auto;
         }
-
         .project-title {
             font-family: 'Brown Sugar', cursive;
             font-size: clamp(36px, 4vw, 56px);
             color: #fff;
             margin-bottom: 32px;
         }
-
         .project-description {
             color: rgba(255, 255, 255, 0.9);
             font-size: 18px;
@@ -364,20 +335,17 @@
             margin-bottom: 48px;
             font-weight: 300;
         }
-
         .project-images {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
             margin-top: 40px;
         }
-
         .project-image {
             width: 100%;
             border-radius: 20px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
-
         /* Letter Page */
         .letter-page {
             display: none;
@@ -387,7 +355,6 @@
             position: relative;
             overflow: hidden;
         }
-
         /* Golden Flowers Decoration */
         .flower {
             position: absolute;
@@ -395,12 +362,10 @@
             height: 80px;
             opacity: 0.6;
         }
-
         .flower-1 { top: 40px; left: 40px; }
         .flower-2 { top: 40px; right: 40px; }
         .flower-3 { bottom: 40px; left: 40px; }
         .flower-4 { bottom: 40px; right: 40px; }
-
         .letter-content {
             max-width: 800px;
             margin: 0 auto;
@@ -409,7 +374,6 @@
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-
         .letter-title {
             font-family: 'Brown Sugar', cursive;
             font-size: 42px;
@@ -417,7 +381,6 @@
             margin-bottom: 32px;
             text-align: center;
         }
-
         .letter-text {
             color: #333;
             font-size: 16px;
@@ -425,29 +388,38 @@
             text-align: justify;
             white-space: pre-line;
         }
-
         /* Responsive Design */
         @media (max-width: 1024px) {
             .pinterest-grid {
-                column-count: 2;
+                grid-template-columns: repeat(2, 1fr);
             }
-
+            .grid-item:nth-child(1) { grid-row: span 40; }
+            .grid-item:nth-child(2) { grid-row: span 71; }
+            .grid-item:nth-child(3) { grid-row: span 60; }
+            .grid-item:nth-child(4) { grid-row: span 40; }
+            .grid-item:nth-child(5) { grid-row: span 71; }
+            .grid-item:nth-child(6) { grid-row: span 40; }
+            
             .content-wrapper {
                 grid-template-columns: 1fr;
                 gap: 40px;
             }
-
             .profile-glass {
                 width: 350px;
                 height: 350px;
             }
         }
-
         @media (max-width: 768px) {
             .pinterest-grid {
-                column-count: 1;
+                grid-template-columns: 1fr;
             }
-
+            .grid-item:nth-child(1) { grid-row: span 40; }
+            .grid-item:nth-child(2) { grid-row: span 71; }
+            .grid-item:nth-child(3) { grid-row: span 60; }
+            .grid-item:nth-child(4) { grid-row: span 40; }
+            .grid-item:nth-child(5) { grid-row: span 71; }
+            .grid-item:nth-child(6) { grid-row: span 40; }
+            
             .logo {
                 top: 20px;
                 right: 20px;
@@ -455,40 +427,32 @@
                 height: 60px;
                 font-size: 24px;
             }
-
             .content-wrapper {
                 padding: 20px;
             }
-
             .profile-glass {
                 width: 280px;
                 height: 280px;
             }
-
             .nav-buttons {
                 flex-direction: column;
             }
-
             .nav-btn {
                 width: 100%;
                 justify-content: center;
             }
-
             .letter-content {
                 padding: 40px 30px;
             }
-
             .back-button {
                 top: 20px;
                 left: 20px;
             }
         }
-
         /* Smooth Transitions */
         .page {
             animation: fadeIn 0.5s ease-in;
         }
-
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -510,9 +474,9 @@
         <div class="decoration-circle circle-1"></div>
         <div class="decoration-circle circle-2"></div>
         
-     <div class="logo">
-    <img src="assets/logo.png.PNG" alt="Logo" style="width: 70%; height: 70%; object-fit: contain;">
-</div>
+        <div class="logo">
+            <img src="assets/logo.png" alt="Logo" style="width: 70%; height: 70%; object-fit: contain;">
+        </div>
         
         <div class="content-wrapper">
             <div class="text-content">
@@ -551,57 +515,58 @@
         </div>
         
         <div class="pinterest-grid" id="portfolioGrid">
-    <!-- Column 1 -->
-    <!-- Project 1 -->
-    <div class="grid-item" onclick="showProject(1)">
-        <img src="assets/project1.jpg" alt="Projet 1" class="grid-image">
-        <div class="grid-overlay">
-            <h3 class="grid-title">Projet Design UI/UX</h3>
+            <!-- Column 1 -->
+            <!-- Project 1 -->
+            <div class="grid-item" onclick="showProject(1)">
+                <img src="assets/project1.jpg" alt="Projet 1" class="grid-image">
+                <div class="grid-overlay">
+                    <h3 class="grid-title">Projet Design UI/UX</h3>
+                </div>
+            </div>
+            
+            <!-- Project 2 -->
+            <div class="grid-item" onclick="showProject(2)">
+                <img src="assets/project2.jpg" alt="Projet 2" class="grid-image">
+                <div class="grid-overlay">
+                    <h3 class="grid-title">Application Mobile</h3>
+                </div>
+            </div>
+            
+            <!-- Column 2 -->
+            <!-- Project 5 -->
+            <div class="grid-item" onclick="showProject(5)">
+                <img src="assets/project5.jpg" alt="Projet 5" class="grid-image">
+                <div class="grid-overlay">
+                    <h3 class="grid-title">Motion Design</h3>
+                </div>
+            </div>
+            
+            <!-- Project 3 -->
+            <div class="grid-item" onclick="showProject(3)">
+                <img src="assets/project3.jpg" alt="Projet 3" class="grid-image">
+                <div class="grid-overlay">
+                    <h3 class="grid-title">Branding & Identité</h3>
+                </div>
+            </div>
+            
+            <!-- Column 3 -->
+            <!-- Project 6 -->
+            <div class="grid-item" onclick="showProject(6)">
+                <img src="assets/project6.jpg" alt="Projet 6" class="grid-image">
+                <div class="grid-overlay">
+                    <h3 class="grid-title">Illustration Digitale</h3>
+                </div>
+            </div>
+            
+            <!-- Project 4 -->
+            <div class="grid-item" onclick="showProject(4)">
+                <img src="assets/project4.jpg" alt="Projet 4" class="grid-image">
+                <div class="grid-overlay">
+                    <h3 class="grid-title">Site Web Responsive</h3>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <!-- Project 2 -->
-    <div class="grid-item" onclick="showProject(2)">
-        <img src="assets/project2.jpg" alt="Projet 2" class="grid-image">
-        <div class="grid-overlay">
-            <h3 class="grid-title">Application Mobile</h3>
-        </div>
-    </div>
-    
-    <!-- Column 2 -->
-    <!-- Project 5 -->
-    <div class="grid-item" onclick="showProject(5)">
-        <img src="assets/project5.jpg" alt="Projet 5" class="grid-image">
-        <div class="grid-overlay">
-            <h3 class="grid-title">Motion Design</h3>
-        </div>
-    </div>
-    
-    <!-- Project 3 -->
-    <div class="grid-item" onclick="showProject(3)">
-        <img src="assets/project3.jpg" alt="Projet 3" class="grid-image">
-        <div class="grid-overlay">
-            <h3 class="grid-title">Branding & Identité</h3>
-        </div>
-    </div>
-    
-    <!-- Column 3 -->
-    <!-- Project 6 -->
-    <div class="grid-item" onclick="showProject(6)">
-        <img src="assets/project6.jpg" alt="Projet 6" class="grid-image">
-        <div class="grid-overlay">
-            <h3 class="grid-title">Illustration Digitale</h3>
-        </div>
-    </div>
-    
-    <!-- Project 4 -->
-    <div class="grid-item" onclick="showProject(4)">
-        <img src="assets/project4.jpg" alt="Projet 4" class="grid-image">
-        <div class="grid-overlay">
-            <h3 class="grid-title">Site Web Responsive</h3>
-        </div>
-    </div>
-</div>
 
     <!-- Project Detail Page -->
     <div id="projectDetail" class="project-detail page">
@@ -676,11 +641,17 @@
             <p class="letter-text">Madame, Monsieur,
                 
 Actuellement en dernière année de Bachelor Marketing et Communication, je me permets de vous adresser ma candidature spontanée pour une alternance en Master au sein de votre équipe de communication et marketing, dès septembre 2026.
+
 Votre approche de la beauté, qui allie innovation coréenne et réponse aux besoins occidentaux, correspond exactement à ma vision du marketing : créer des solutions authentiques qui accompagnent réellement les clients. Cette philosophie résonne avec mon parcours, où j'ai appris à concilier créativité artistique et efficacité commerciale.
+
 Formée initialement à l'école Brassart en art graphique, j'ai choisi de me réorienter vers le marketing sans abandonner cette sensibilité créative qui guide mes réalisations professionnelles. Cette double compétence me permet d'aborder les projets de communication avec un regard différent.
-Actuellement chez Intérieurs Privés, je gère la communication digitale et développe des partenariats d'influence. Ma sélection comme finaliste au Prix Com'Handicap pour l’entreprise IKEA et mon engagement pour l'association Imagine For Margo illustrent ma capacité à mener des projets créatifs avec un réel impact.
+
+Actuellement chez Intérieurs Privés, je gère la communication digitale et développe des partenariats d'influence. Ma sélection comme finaliste au Prix Com'Handicap pour l'entreprise IKEA et mon engagement pour l'association Imagine For Margo illustrent ma capacité à mener des projets créatifs avec un réel impact.
+
 Mon intérêt grandissant pour l'UX/UI design s'inscrit naturellement dans cette démarche : comprendre que l'expérience d'une marque dépasse le produit pour englober toutes les interactions. En tant qu'utilisatrice de vos produits depuis plusieurs années, notamment votre CC crème, je mesure l'importance de cette cohérence entre promesse et expérience vécue.
+
 Intégrer votre équipe en alternance me permettrait d'allier ma formation, ma créativité et mon aspiration à contribuer à des projets qui transforment positivement la relation des consommateurs à la beauté.
+
 Je serais ravie de vous rencontrer pour vous présenter plus en détail mon parcours et mes motivations.
 
 Je vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées.

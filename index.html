@@ -49,7 +49,7 @@
             background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%);
             z-index: 1;
         }
-        /* Logo */
+        /* Logo - FIXED */
         .logo {
             position: absolute;
             top: 40px;
@@ -64,11 +64,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Brown Sugar', cursive;
-            font-size: 32px;
-            color: #fff;
             z-index: 10;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .logo img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+            display: block;
         }
         /* Main Content Container */
         .content-wrapper {
@@ -251,33 +255,25 @@
             color: rgba(255, 255, 255, 0.7);
             font-weight: 300;
         }
-        /* Pinterest-style Grid */
+        /* Pinterest-style Grid - COMPLETELY FIXED */
         .pinterest-grid {
             max-width: 1400px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            grid-auto-rows: 10px;
+            columns: 3;
+            column-gap: 20px;
         }
         .grid-item {
-            position: relative;
+            break-inside: avoid;
+            margin-bottom: 20px;
             cursor: pointer;
+            position: relative;
             overflow: hidden;
             border-radius: 20px;
             background: rgba(255, 255, 255, 0.05);
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            display: inline-block;
+            width: 100%;
         }
-        /* Column 1: Project 1 (square) + Project 2 (tall portrait) */
-        .grid-item:nth-child(1) { grid-row: span 40; }  /* Project 1 - 1:1 */
-        .grid-item:nth-child(2) { grid-row: span 71; }  /* Project 2 - 9:16 */
-        /* Column 2: Project 5 (medium portrait) + Project 3 (square) */
-        .grid-item:nth-child(3) { grid-row: span 60; }  /* Project 5 - 2:3 */
-        .grid-item:nth-child(4) { grid-row: span 40; }  /* Project 3 - 1:1 */
-        /* Column 3: Project 6 (tall portrait) + Project 4 (square) */
-        .grid-item:nth-child(5) { grid-row: span 71; }  /* Project 6 - 9:16 */
-        .grid-item:nth-child(6) { grid-row: span 40; }  /* Project 4 - 1:1 */
-        
         .grid-item:hover {
             transform: translateY(-8px);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
@@ -289,6 +285,7 @@
             width: 100%;
             display: block;
             border-radius: 20px;
+            vertical-align: bottom;
         }
         .grid-overlay {
             position: absolute;
@@ -308,6 +305,8 @@
             color: #fff;
             font-size: 18px;
             font-weight: 600;
+            position: relative;
+            z-index: 1;
         }
         /* Project Detail Page */
         .project-detail {
@@ -386,65 +385,175 @@
             text-align: justify;
             white-space: pre-line;
         }
-        /* Responsive Design */
+        /* Responsive Design - COMPLETELY OPTIMIZED */
         @media (max-width: 1024px) {
             .pinterest-grid {
-                grid-template-columns: repeat(2, 1fr);
+                columns: 2;
+                column-gap: 16px;
             }
-            .grid-item:nth-child(1) { grid-row: span 40; }
-            .grid-item:nth-child(2) { grid-row: span 71; }
-            .grid-item:nth-child(3) { grid-row: span 60; }
-            .grid-item:nth-child(4) { grid-row: span 40; }
-            .grid-item:nth-child(5) { grid-row: span 71; }
-            .grid-item:nth-child(6) { grid-row: span 40; }
-            
+            .grid-item {
+                margin-bottom: 16px;
+            }
             .content-wrapper {
                 grid-template-columns: 1fr;
                 gap: 40px;
+                padding: 20px;
             }
             .profile-glass {
                 width: 350px;
                 height: 350px;
             }
+            .logo {
+                top: 30px;
+                right: 30px;
+                width: 70px;
+                height: 70px;
+            }
+            .back-button {
+                top: 30px;
+                left: 30px;
+            }
+            .portfolio-page {
+                padding: 80px 20px 40px;
+            }
+            .letter-content {
+                padding: 50px 40px;
+            }
+            .flower {
+                width: 60px;
+                height: 60px;
+            }
         }
         @media (max-width: 768px) {
             .pinterest-grid {
-                grid-template-columns: 1fr;
+                columns: 1;
+                column-gap: 0;
             }
-            .grid-item:nth-child(1) { grid-row: span 40; }
-            .grid-item:nth-child(2) { grid-row: span 71; }
-            .grid-item:nth-child(3) { grid-row: span 60; }
-            .grid-item:nth-child(4) { grid-row: span 40; }
-            .grid-item:nth-child(5) { grid-row: span 71; }
-            .grid-item:nth-child(6) { grid-row: span 40; }
-            
+            .grid-item {
+                margin-bottom: 16px;
+            }
             .logo {
                 top: 20px;
                 right: 20px;
                 width: 60px;
                 height: 60px;
-                font-size: 24px;
+            }
+            .logo img {
+                width: 65%;
+                height: 65%;
             }
             .content-wrapper {
                 padding: 20px;
+                gap: 30px;
+            }
+            .main-title {
+                font-size: clamp(36px, 10vw, 48px);
+            }
+            .intro-text {
+                font-size: 16px;
+                margin-bottom: 30px;
             }
             .profile-glass {
-                width: 280px;
-                height: 280px;
+                width: 100%;
+                max-width: 320px;
+                height: auto;
+                aspect-ratio: 1;
+            }
+            .profile-image {
+                border-radius: 16px;
             }
             .nav-buttons {
                 flex-direction: column;
+                width: 100%;
             }
             .nav-btn {
                 width: 100%;
                 justify-content: center;
-            }
-            .letter-content {
-                padding: 40px 30px;
+                padding: 16px 32px;
+                font-size: 15px;
             }
             .back-button {
                 top: 20px;
                 left: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+            .portfolio-page {
+                padding: 80px 16px 40px;
+            }
+            .portfolio-header {
+                margin-bottom: 40px;
+            }
+            .portfolio-title {
+                font-size: clamp(32px, 8vw, 48px);
+            }
+            .portfolio-subtitle {
+                font-size: 16px;
+            }
+            .grid-title {
+                font-size: 16px;
+            }
+            .project-detail {
+                padding: 80px 20px 40px;
+            }
+            .project-title {
+                font-size: clamp(28px, 7vw, 40px);
+            }
+            .project-description {
+                font-size: 16px;
+            }
+            .project-images {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .letter-page {
+                padding: 80px 20px 40px;
+            }
+            .letter-content {
+                padding: 40px 24px;
+            }
+            .letter-title {
+                font-size: 32px;
+                margin-bottom: 24px;
+            }
+            .letter-text {
+                font-size: 15px;
+                line-height: 1.8;
+            }
+            .flower {
+                width: 50px;
+                height: 50px;
+            }
+            .flower-1 { top: 20px; left: 20px; }
+            .flower-2 { top: 20px; right: 20px; }
+            .flower-3 { bottom: 20px; left: 20px; }
+            .flower-4 { bottom: 20px; right: 20px; }
+        }
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 32px;
+            }
+            .intro-text {
+                font-size: 14px;
+            }
+            .nav-btn {
+                padding: 14px 28px;
+                font-size: 14px;
+            }
+            .profile-glass {
+                max-width: 280px;
+                padding: 16px;
+            }
+            .letter-content {
+                padding: 32px 20px;
+            }
+            .letter-title {
+                font-size: 28px;
+            }
+            .letter-text {
+                font-size: 14px;
             }
         }
         /* Smooth Transitions */
@@ -473,7 +582,7 @@
         <div class="decoration-circle circle-2"></div>
         
         <div class="logo">
-            <img src="assets/logo.png" alt="Logo" style="width: 70%; height: 70%; object-fit: contain;">
+            <img src="assets/logo.png" alt="Logo">
         </div>
         
         <div class="content-wrapper">
@@ -513,7 +622,6 @@
         </div>
         
         <div class="pinterest-grid" id="portfolioGrid">
-            <!-- Column 1 -->
             <!-- Project 1 -->
             <div class="grid-item" onclick="showProject(1)">
                 <img src="assets/project1.jpg" alt="Projet 1" class="grid-image">
@@ -530,7 +638,6 @@
                 </div>
             </div>
             
-            <!-- Column 2 -->
             <!-- Project 5 -->
             <div class="grid-item" onclick="showProject(5)">
                 <img src="assets/project5.jpg" alt="Projet 5" class="grid-image">
@@ -547,7 +654,6 @@
                 </div>
             </div>
             
-            <!-- Column 3 -->
             <!-- Project 6 -->
             <div class="grid-item" onclick="showProject(6)">
                 <img src="assets/project6.jpg" alt="Projet 6" class="grid-image">
